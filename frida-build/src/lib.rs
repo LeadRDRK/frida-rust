@@ -21,13 +21,14 @@ fn download_and_use_devkit_internal(
     force_download: bool,
 ) -> Result<String, Error> {
     let mut target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
 
     let out_dir = env::var_os("OUT_DIR").unwrap();
     let out_dir_path = Path::new(&out_dir);
 
     if target_arch == "aarch64" {
         target_arch = "arm64".to_string();
-    } else if target_arch == "arm" {
+    } else if target_arch == "arm" && target_os != "android" {
         target_arch = "armhf".to_string();
     } else if target_arch == "i686" {
         target_arch = "x86".to_string();
